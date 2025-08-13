@@ -1,22 +1,36 @@
+//***************************************
+//COPYRIGHT(C)2025,EthasuLi
+//All rights reserved.
+//Module Name  : data_segment.v
+//
+//Author       : EthasuLi
+//Email        : 13591028146@163.com
+//Data         : 2025/8/5
+//Version      : V 1.0
+//
+//Abstract     : 
+//Called by    :
+//
+//****************************************  
 module data_segment#(
 	parameter MAX_CNT = 100,
 	parameter SKIP_MAX=50,
 	parameter USE_BRAM = 1
 ) (
-    input  wire                     clk,            // Ö÷Ê±ÖÓ
-    input  wire                     rst_n,          // Òì²½¸´Î»
+    input  wire                     clk,            // ä¸»æ—¶é’Ÿ
+    input  wire                     rst_n,          // å¼‚æ­¥å¤ä½
     
-    // ÊäÈëAXI Stream½Ó¿Ú (64Î»)
+    // è¾“å…¥AXI Streamæ¥å£ (64ä½)
     input  wire [75:0]              s_axis_tdata,   // {real[31:0], imag[31:0]}
-    input  wire                     s_axis_tvalid,  // Êı¾İÓĞĞ§
-    input  wire                     s_axis_tlast,   // ÊäÈëÁ÷½áÊø±êÖ¾
-    output wire                     s_axis_tready,  // ×¼±¸ºÃ½ÓÊÕ
+    input  wire                     s_axis_tvalid,  // æ•°æ®æœ‰æ•ˆ
+    input  wire                     s_axis_tlast,   // è¾“å…¥æµç»“æŸæ ‡å¿—
+    output wire                     s_axis_tready,  // å‡†å¤‡å¥½æ¥æ”¶
     
-    // Êä³öAXI Stream½Ó¿Ú (64Î»)
+    // è¾“å‡ºAXI Streamæ¥å£ (64ä½)
     output wire [75:0]              m_axis_tdata,   // {real[31:0], imag[31:0]}
-    output wire                     m_axis_tvalid,  // Êı¾İÓĞĞ§
-    output wire                     m_axis_tlast,   // ÖÜÆÚ½áÊø±êÖ¾
-    input  wire                     m_axis_tready,   // ÏÂÓÎ×¼±¸ºÃ
+    output wire                     m_axis_tvalid,  // æ•°æ®æœ‰æ•ˆ
+    output wire                     m_axis_tlast,   // å‘¨æœŸç»“æŸæ ‡å¿—
+    input  wire                     m_axis_tready,   // ä¸‹æ¸¸å‡†å¤‡å¥½
 	
 	output wire	[75:0]				m_first_axis_tdata,
 	output wire						m_first_axis_tvalid,
@@ -30,7 +44,7 @@ localparam READ = 1;
 localparam WAIT = 2;
 localparam DP_WD = clog2(MAX_CNT);
 reg [1:0] state;
-reg [12:0] skip_cnt; //Ìø¹ı5000¸öÊı¾İ
+reg [12:0] skip_cnt; //è·³è¿‡5000ä¸ªæ•°æ®
 reg skip_init_done;
 reg skip_init_done_pre;
 wire skip_init_done_rise;
@@ -90,7 +104,7 @@ assign skip_init_done_rise = skip_init_done_pre && ~skip_init_done;
 always @(posedge clk or negedge rst_n) begin
 	if(~rst_n)
 		data_cnt <= 'd0;
-	else if(s_axis_tlast) // ÏÂÒ»°üÊı¾İ»Ø0
+	else if(s_axis_tlast) // ä¸‹ä¸€åŒ…æ•°æ®å›0
 		data_cnt <= 'd0;
 	else if(i_axi_vld && data_cnt == MAX_CNT-1 && skip_init_done)
 		data_cnt <= 'd0;
@@ -230,7 +244,7 @@ fifo_generator_0 fifo_w77_d8192 (
   .data_count(fifo_cnt)  // output wire [13 : 0] data_count
 );
 */
-// È¡2¶ÔÊı£¬ÅĞ¶ÏÒ»¸öÊı¾İĞèÒª¶àÉÙÎ»¿í
+// å–2å¯¹æ•°ï¼Œåˆ¤æ–­ä¸€ä¸ªæ•°æ®éœ€è¦å¤šå°‘ä½å®½
     function integer clog2;
         input integer value;
               integer temp;
