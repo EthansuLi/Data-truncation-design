@@ -1,3 +1,17 @@
+//***************************************
+//COPYRIGHT(C)2025,EthasuLi
+//All rights reserved.
+//Module Name  : muti_data_segment.v
+//
+//Author       : EthasuLi
+//Email        : 13591028146@163.com
+//Data         : 2025/8/5
+//Version      : V 1.0
+//
+//Abstract     : 
+//Called by    :
+//
+//****************************************  
 module muti_data_segment #(
 	parameter LANE0_SKIP_CNT = 5000,
 	parameter LANE1_SKIP_CNT = 5063,
@@ -205,5 +219,6 @@ data_segment#(
 	.m_first_axis_tready    (m_first_axis_tready_4)
 );
 endmodule
+
 
 
